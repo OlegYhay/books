@@ -10,6 +10,9 @@ django-allauth = "*"
 environs = {extras = ["django"], version = "*"}
 pillow = "*"
 djangorestframework = "*"
+gunicorn = "*"
+whitenoise = "*"
+dj-database-url = "*"
 
 [dev-packages]
 
