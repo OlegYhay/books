@@ -8,6 +8,8 @@ django = "*"
 django-crispy-forms = "*"
 django-allauth = "*"
 environs = {extras = ["django"], version = "*"}
+pillow = "*"
+djangorestframework = "*"
 
 [dev-packages]
 

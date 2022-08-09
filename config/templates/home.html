@@ -2,13 +2,46 @@
 {% block title %}Home{% endblock title %}
 
 {% block content %}
-<h1>Homepage</h1>
-{% if user.is_authenticated %}
-    Hi {{ user.email }} <br/>
-    <a href="{% url 'account_logout' %}">Log out</a>
-{% else %}
-    <p>You are not logged in</p>
-<a href="{% url 'account_login' %}">Log in</a>
-<a href="{% url 'account_signup' %}">Signup</a>
-{% endif %}
+<div class="jumbotron">
+  <h1 class="display-4">О нас</h1>
+  <p class="lead">Компания 'bookstore', основанная в 2005 году, сегодня является лидером на рынке лицензионных электронных книг в России и странах СНГ. Лауреат «Премии Рунета-2014»</p>
+  <hr class="my-4">
+  <p>Ежемесячная аудитория сервисов компании составляет 12,5 млн человек</p>
+  <p class="lead">
+    <a class="btn btn-primary btn-lg" href="{% url 'about'%}" role="button">Подробнее</a>
+      <a class="btn btn-primary btn-lg" href="{% url 'book_list'%}" role="button">Все книги</a>
+  </p>
+</div>
+
+  <nav class="navbar navbar-expand-lg  bg-light">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">Жанры</a>
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                  {% for category in categories %}
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{% url 'genre' category.name %}">{{category.name}}</a>
+                </li>
+                  {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+
+<h2 class="align-middle">Популярные книги</h2>
+<div class="container-fluidr">
+      <div class="row justify-content-start">
+    {% for book in books %}
+    <div class="col-2 align-self-start">
+
+        <img class="bookcover" src="{{ book.cover.url }}" alt="{{book.title}}" widht="550px" height="350px"/>
+      <h2><a href="{{ book.get_absolute_url }}">{{book.title}}</a></h2>
+
+    </div>
+    {% endfor %}
+      </div>
+</div>
 {% endblock content%}

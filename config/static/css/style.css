@@ -1,0 +1,13 @@
+.bookcover{
+    height:320px;
+}
+
+#mycont{
+    display:inline-block;
+    width:100%;
+    background-color:red;
+}
+#book{
+    background-color:blue;
+    margin-left:15px;
+}

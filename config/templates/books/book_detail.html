@@ -1,9 +1,52 @@
 {% extends '_base.html' %}
+{% load crispy_forms_tags %}
 {% block title %} Book {% endblock title %}
 {% block content %}
-    <div class = "book-detail">
-        <h2><a href="">{{book.title}}</a></h2>
-        <p>Автор:{{book.author}}</p>
-        <p>Цена:{{book.price}} руб</p>
+
+<div class="book-detail">
+    {% if book.cover %}
+    <img class="bookcover" src="{{ book.cover.url }}" alt="{{ book.title }}" widht="550px" height="350px"/>
+    {% endif %}
+    <h2><a href="">{{book.title}}</a></h2>
+    <p>Автор:{{book.author}}</p>
+    <p>Цена:{{book.price}} руб</p>
+
+    <div>
+        <h3>Комментарии:</h3>
+        <ul>
+            {% for review in book.reviews.all %}
+            <li>{{review.review}} ({{review.author}}) - {{review.date}}</li>
+            {% endfor %}
+        </ul>
     </div>
+
+    {% if user.is_authenticated %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+            <div class="d-flex flex-start w-100">
+                <div class="form-outline w-100">
+                    {{ reviews_form|crispy }}
+                </div>
+            </div>
+            <div class="float-end mt-2 pt-1">
+                <button type="submit" class="btn btn-primary btn-sm">Оставить комментарий</button>
+            </div>
+        </div>
+    </form>
+
+    {% else %}
+    <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+        <div class="d-flex flex-start w-100">
+            <div class="form-outline w-100">
+                <h4>Комментарии могут оставлять только зарегистрированные пользователи</h4>
+                <a href="{% url 'comment_login' %}">Войти</a>
+            </div>
+        </div>
+        <div class="float-end mt-2 pt-1">
+        </div>
+    </div>
+    {% endif %}
+
+</div>
 {% endblock content %}
