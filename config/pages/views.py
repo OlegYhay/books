@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 
 from books.models import Book, CategoryBooks
+from news.models import Article
 
 
 class HomePageView(TemplateView):
@@ -11,8 +12,11 @@ class HomePageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
-        context['books'] = Book.objects.all()[:6]
+        books = Book.objects.filter(ispopular=True)
+        context['books'] = books
         context['categories'] = CategoryBooks.objects.all()
+        lastarticles = Article.objects.order_by('-date')[:3]
+        context['articles'] = lastarticles
         return context
 
 

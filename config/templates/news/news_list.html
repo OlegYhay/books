@@ -1,0 +1,17 @@
+{% extends '_base.html' %}
+{% block title %} Books {% endblock title %}
+
+{% block content %}
+<h3>Новости</h3>
+{% for article in articles %}
+    <article class="blog-post">
+        <h4 class="blog-post-title">{{article.name}}</h4>
+        <p class="blog-post-meta">{{article.date}} <a href="#">Admin</a></p>
+
+        <p>{{article.description}}</p>
+        <hr>
+        <p></p>
+    </article>
+{% endfor %}
+
+{% endblock content%}

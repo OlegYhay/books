@@ -18,6 +18,7 @@ class Book(models.Model):
     agecontrol = models.CharField(default='0+', null=True, max_length=20)
     copyright = models.CharField(max_length=200, default='', null=True)
     ISBN = models.CharField(max_length=33, default='', null=True)
+    ispopular = models.BooleanField(default=False)
 
     class Meta:
         permissions = [

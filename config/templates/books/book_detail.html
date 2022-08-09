@@ -3,14 +3,44 @@
 {% block title %} Book {% endblock title %}
 {% block content %}
 
+    <nav class="navbar navbar-expand-lg bg-light">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">Жанры</a>
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                  {% for category in categories %}
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{% url 'genre' category.name %}">{{category.name}}</a>
+                </li>
+                  {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </nav>
+<br/>
 <div class="book-detail">
-    {% if book.cover %}
-    <img class="bookcover" src="{{ book.cover.url }}" alt="{{ book.title }}" widht="550px" height="350px"/>
-    {% endif %}
-    <h2><a href="">{{book.title}}</a></h2>
-    <p>Автор:{{book.author}}</p>
-    <p>Цена:{{book.price}} руб</p>
-
+    <div class = "container-fluid">
+        <div class="row">
+            <div class ="col-2">
+                {% if book.cover %}
+                <img class="bookcover" src="{{ book.cover.url }}" alt="{{ book.title }}" widht="550px" height="350px"/>
+                {% endif %}
+                <h2><a href="">{{book.title}}</a></h2>
+                <p>Автор:{{book.author}}</p>
+                <p>Цена: {{book.price}} руб</p>
+                </div>
+            <div class="col">
+                <h3>Описание</h3>
+                <p>{{book.description}}</p>
+                <h4>Дополнительная информация</h4>
+                <h5>Возврастное ограничение:</h5>{{book.agecontrol}}
+                <h5>Правообладатель:</h5>{{book.copyright}}
+                <h5>ISBN:</h5>{{book.ISBN}}
+            </div>
+        </div>
+    </div>
     <div>
         <h3>Комментарии:</h3>
         <ul>
@@ -40,7 +70,7 @@
         <div class="d-flex flex-start w-100">
             <div class="form-outline w-100">
                 <h4>Комментарии могут оставлять только зарегистрированные пользователи</h4>
-                <a href="{% url 'comment_login' %}">Войти</a>
+                <a href="{% url 'account_login' %}">Войти</a>
             </div>
         </div>
         <div class="float-end mt-2 pt-1">

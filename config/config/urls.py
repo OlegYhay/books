@@ -20,11 +20,12 @@ from django.urls import path, include
 from . import settings
 
 urlpatterns = [
-    # Django admin
-    path('admin/', admin.site.urls),
-    # User managment
-    path('accounts/', include('allauth.urls')),
-    # Local apps
-    path('', include('pages.urls')),
-    path('books/', include('books.urls'))
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  # Django admin
+                  path('admin/', admin.site.urls),
+                  # User managment
+                  path('accounts/', include('allauth.urls')),
+                  # Local apps
+                  path('', include('pages.urls')),
+                  path('books/', include('books.urls')),
+                  path('news/', include('news.urls')),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

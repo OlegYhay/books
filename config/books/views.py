@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.urls import reverse_lazy
@@ -37,6 +37,7 @@ class BookDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         data = super(BookDetailView, self).get_context_data(**kwargs)
+        data['categories'] = CategoryBooks.objects.all()
         if self.request.user.is_authenticated:
             data['reviews_form'] = ModelComment(instance=self.request.user)
         return data
@@ -49,7 +50,7 @@ class BookDetailView(DetailView):
                 book=self.get_object(),
             )
             new_comment.save()
-            return self.get(self, request, *args, **kwargs)
+            return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 
 class BookCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -68,5 +69,4 @@ class CommentViewSet(ModelViewSet):
     queryset = Review.objects.all()
 
     def get_serializer_context(self):
-        print('myprint:', self.args)
         return super(CommentViewSet, self).get_serializer_context(self)

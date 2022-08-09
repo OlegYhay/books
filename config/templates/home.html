@@ -38,10 +38,24 @@
     <div class="col-2 align-self-start">
 
         <img class="bookcover" src="{{ book.cover.url }}" alt="{{book.title}}" widht="550px" height="350px"/>
-      <h2><a href="{{ book.get_absolute_url }}">{{book.title}}</a></h2>
-
+      <h4><a href="{{ book.get_absolute_url }}">{{book.title}}</a></h4>
     </div>
     {% endfor %}
       </div>
 </div>
+<br/><br/>
+<h3>Последние новости</h3>
+{% for article in articles %}
+    <article class="blog-post">
+        <h4 class="blog-post-title">{{article.name}}</h4>
+        <p class="blog-post-meta">{{article.date}} <a href="#">Admin</a></p>
+
+        <p>{{article.description}}</p>
+        <hr>
+        <p></p>
+    </article>
+
+        {% endfor %}
+<button type="button" class="btn btn-outline-success"><a href="{% url 'news' %}">Все новости</a></button>
+
 {% endblock content%}
