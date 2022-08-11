@@ -37,7 +37,7 @@
     {% for book in books %}
     <div class="col-2 align-self-start">
 
-        <img class="bookcover" src="{{ book.cover.url }}" alt="{{book.title}}" widht="550px" height="350px"/>
+        <img class="bookcover" src="{{ book.cover.url }}" alt="{{book.title}}"/>
       <h4><a href="{{ book.get_absolute_url }}">{{book.title}}</a></h4>
     </div>
     {% endfor %}

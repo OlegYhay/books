@@ -28,5 +28,6 @@ urlpatterns = [
                   path('', include('pages.urls')),
                   path('books/', include('books.urls')),
                   path('news/', include('news.urls')),
+                  path('cart/', include('cart.urls'))
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

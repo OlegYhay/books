@@ -8,6 +8,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.viewsets import ModelViewSet
 
+from cart.forms import CardAddProductForm
 from .forms import ModelComment
 from .models import Book, CategoryBooks, Review
 from .serializers import BookSerializer
@@ -28,6 +29,7 @@ class BookDetailView(DetailView):
     model = Book
     template_name = 'books/book_detail.html'
     context_object_name = 'book'
+    cart_product_form = CardAddProductForm()
 
     def get_object(self, queryset=None):
         request = self.request
@@ -38,6 +40,8 @@ class BookDetailView(DetailView):
     def get_context_data(self, **kwargs):
         data = super(BookDetailView, self).get_context_data(**kwargs)
         data['categories'] = CategoryBooks.objects.all()
+        data['product'] = Book.objects.filter(pk=self.kwargs.get('pk'))
+        data['cart_product_form'] = self.cart_product_form
         if self.request.user.is_authenticated:
             data['reviews_form'] = ModelComment(instance=self.request.user)
         return data

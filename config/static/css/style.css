@@ -1,0 +1,23 @@
+ .bookcover{
+  height: 20%;
+  width: 80%;
+  /* еще больше контроля с max-width */
+  max-width: 600px;
+ }
+
+.bookcover2{
+  width: 75%;
+  /* еще больше контроля с max-width */
+  max-width: 400px;
+}
+
+.bookcover3{
+  width: 15%;
+  /* еще больше контроля с max-width */
+  max-width: 200px;
+}
+.bookcover4{
+  width: 5%;
+  /* еще больше контроля с max-width */
+  max-width: 30px;
+}

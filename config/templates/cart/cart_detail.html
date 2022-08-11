@@ -1,0 +1,45 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Корзина {% endblock title %}
+
+{% block content %}
+<h1>Корзина</h1>
+
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Изображение</th>
+        <th scope="col">Hаименование</th>
+        <th scope="col">Кол-во</th>
+        <th scope="col">Цена</th>
+        <th scope="col">Сумма</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for key,value in cart.items %}
+    <tr>
+        <th scope="row"><img class="bookcover3" src="{{ value.product.cover.url}}"/></th>
+        <td>{{value.product.title}}</td>
+        <td>{{value.quantity}}</td>
+        <td>{{value.price}}</td>
+        <td>{{value.total_price }}</td>
+        <td><a href="{% url 'cart:cart_remove' value.product.id %}">Удалить</a></td>
+    </tr>
+    {% endfor %}
+
+    <tr>
+        <th scope="row">ВСЕГО</th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <th>{{itogsumm}} руб</th>
+    </tr>
+    </tbody>
+</table>
+
+<button type="submit" class="btn btn-primary btn-sm">Оформить заказ</button>
+
+
+{% endblock content %}

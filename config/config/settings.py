@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'pages',
     'books',
     'news',
+    'cart',
 ]
 
 SITE_ID = 1
@@ -130,7 +131,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -145,8 +145,6 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-
-
 
 # location of static files for production
 STATIC_ROOT = str(BASE_DIR.joinpath('staticfiles'))
@@ -167,5 +165,11 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# Это ключ, который мы собираемся использовать для хранения корзины в сессии пользователя.
+CART_SESSION_ID = 'cart'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
