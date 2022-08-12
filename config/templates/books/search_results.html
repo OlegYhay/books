@@ -1,0 +1,14 @@
+{% extends '_base.html' %}
+{% block title %}Поиск {% endblock title %}
+
+{% block content %}
+<h3>Результат поиска:</h3>
+<h4>{{mistake}}</h4>
+{% for book in book_list %}
+<div>
+    <h3><a href="{{book.get_absolute_url}}">{{ book.title }}</a></h3>
+    <p>Автор:{{book.author}}</p>
+    <p>Цена:{{book.price}}</p>
+</div>
+{% endfor %}
+{% endblock content %}

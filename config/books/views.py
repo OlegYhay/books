@@ -12,6 +12,7 @@ from cart.forms import CardAddProductForm
 from .forms import ModelComment
 from .models import Book, CategoryBooks, Review
 from .serializers import BookSerializer
+from django.db.models import Q
 
 
 class BookListView(ListView):
@@ -74,3 +75,23 @@ class CommentViewSet(ModelViewSet):
 
     def get_serializer_context(self):
         return super(CommentViewSet, self).get_serializer_context(self)
+
+
+class SearchResultsListView(ListView):
+    model = Book
+    context_object_name = 'book_list'
+    template_name = 'books/search_results.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        result = Book.objects.filter(
+            Q(title__icontains=query) | Q(title__icontains=query)
+        )
+        return result
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        data = super(SearchResultsListView, self).get_context_data(**kwargs)
+        print('len:',len(data['book_list']))
+        if len(data['book_list']) == 0:
+            data['mistake'] = 'Ничего не найдено!'
+        return data

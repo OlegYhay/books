@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
@@ -9,6 +10,7 @@ from .forms import CardAddProductForm
 
 
 @require_POST
+@login_required
 def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Book, id=product_id)
@@ -20,14 +22,14 @@ def cart_add(request, product_id):
                  update_quantity=cd['update'])
         return redirect('cart:cart_detail')
 
-
+@login_required
 def cart_remove(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Book, id=product_id)
     cart.remove(product)
     return redirect('cart:cart_detail')
 
-
+@login_required
 def cart_detail(request):
     cart = Cart(request)
     product_ids = cart.cart.keys()  # получение всех ключей книг
