@@ -8,5 +8,7 @@ WORKDIR /books/config
 COPY Pipfile Pipfile.lock /books/
 RUN pip install pipenv && pipenv install --system
 RUN pip install psycopg2
+RUN pip install django-debug-toolbar
+RUN pip install packaging
 
 COPY . /books/

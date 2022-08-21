@@ -1,18 +1,25 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.forms import forms
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from rest_framework.generics import CreateAPIView
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.viewsets import ModelViewSet
 
+from cart.cart import Cart
 from cart.forms import CardAddProductForm
-from .forms import ModelComment
-from .models import Book, CategoryBooks, Review
+from .forms import ModelComment, ModelOrder
+from .models import Book, CategoryBooks, Review, Order, OrderBooks
 from .serializers import BookSerializer
 from django.db.models import Q
+
+from .service import send_mails
+from .tasks import send_spam_email
 
 
 class BookListView(ListView):
@@ -91,7 +98,64 @@ class SearchResultsListView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         data = super(SearchResultsListView, self).get_context_data(**kwargs)
-        print('len:',len(data['book_list']))
         if len(data['book_list']) == 0:
             data['mistake'] = 'Ничего не найдено!'
         return data
+
+
+class OrderCreate(CreateView):
+    model = Order
+    template_name = 'order/order_create.html'
+    form_class = ModelOrder
+    success_url = reverse_lazy('cart:created_order')
+
+    # Установка user по текущему пользователю
+    def form_valid(self, form):
+        fields = form.save(commit=False)
+        usermodel = get_user_model()
+        fields.user = usermodel.objects.get(pk=self.request.user.pk)
+        fields.save()
+        cart = self.get_cart()
+        booksic = cart['cart']
+        for key, value in booksic.items():
+            print(value)
+            orderbooks = OrderBooks.objects.create(
+                orderid=Order.objects.get(pk=fields.id),
+                book=value['product'],
+                count=value['quantity'],
+                price=float(value['price']),
+                summ=float(value['total_price']),
+            )
+            orderbooks.save()
+        # delete cart
+        cart = Cart(self.request)
+        send_spam_email.delay(form.instance.email,fields.pk)
+        cart.clean()
+        return super().form_valid(form)
+
+    def get_cart(self):
+        cart = Cart(self.request)
+        products_ids = cart.cart.keys()
+        products = Book.objects.filter(id__in=products_ids)
+        sum = 0
+        for product in products:
+            cart.cart[str(product.id)]['product'] = product
+            cart.cart[str(product.id)]['total_price'] = float(cart.cart[str(product.id)]['quantity']) * float(
+                cart.cart[str(product.id)]['price'])
+            sum += cart.cart[str(product.id)]['total_price']
+        return {'cart': cart.cart, 'itogsumm': sum}
+
+    def get_context_data(self, **kwargs):
+        data = super(OrderCreate, self).get_context_data(**kwargs)
+        cart = Cart(self.request)
+        products_ids = cart.cart.keys()
+        products = Book.objects.filter(id__in=products_ids)
+        sum = 0
+        info = self.get_cart()
+        data['cart'] = info['cart']
+        data['itogsumm'] = info['itogsumm']
+        return data
+
+
+class OrderCreated(TemplateView):
+    template_name = 'order/success.html'

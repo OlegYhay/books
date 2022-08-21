@@ -14,6 +14,14 @@ gunicorn = "*"
 whitenoise = "*"
 dj-database-url = "*"
 psycopg2 = "*"
+django-debug-toolbar = "*"
+packaging = "*"
+pip = "*"
+install = "*"
+django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
+flower = "*"
+celery = "==4.4.2"
+redis = "*"
 
 [dev-packages]
 
